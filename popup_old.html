@@ -1,0 +1,138 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Schedule Focus Block</title>
+    <style>
+        :root{
+          --stack-gap: 6px;      /* label → control gap */
+          --section-gap: 14px;   /* gap between sections */
+          --grid-gap: 12px;      /* gap inside start/end/duration grid */
+        }
+      
+        /* Kill default page/top margins */
+        html, body { margin: 0; padding: 0; }
+        body { font: 14px system-ui, sans-serif; }
+      
+        /* Add a small, consistent page padding */
+        .wrap { padding: 10px 12px; width: 340px; }
+      
+        /* Make the heading tight at the top */
+        h3 { margin: 0 0 12px 0; line-height: 1.2; }
+      
+        /* Use one spacing system for every label+input pair */
+        .stack { display: grid; gap: var(--stack-gap); }
+        .section { margin-bottom: var(--section-gap); }
+      
+        /* Reset element margins so .stack/.section control spacing */
+        label { margin: 0; font-weight: 600; }
+        input, textarea, button { margin: 0; padding: 8px; width: 100%; box-sizing: border-box; }
+      
+        /* Start/End/Duration layout */
+        .when {
+          display: grid;
+          grid-template-columns: 1fr 1fr; /* Start | End */
+          gap: var(--grid-gap);
+          align-items: end;
+        }
+        .field { display: grid; gap: var(--stack-gap); }
+        .duration { grid-column: 1 / 2; } /* Duration under Start */
+      
+        /* Section + color palette */
+        .palette {
+          display: grid;
+          grid-template-columns: repeat(11, 1fr);
+          gap: 6px;
+        }
+        .palette button {
+          height: 22px; border-radius: 999px; border: 1px solid #ccc; cursor: pointer;
+          padding: 0;
+        }
+        .palette button[aria-selected="true"] { outline: 2px solid #000; outline-offset: 1px; }
+      
+        /* Calendar-like swatch colors */
+        .palette button[data-colorid="1"]  { background:#a4bdfc; }
+        .palette button[data-colorid="2"]  { background:#7ae7bf; }
+        .palette button[data-colorid="3"]  { background:#dbadff; }
+        .palette button[data-colorid="4"]  { background:#ff887c; }
+        .palette button[data-colorid="5"]  { background:#fbd75b; }
+        .palette button[data-colorid="6"]  { background:#ffb878; }
+        .palette button[data-colorid="7"]  { background:#46d6db; }
+        .palette button[data-colorid="8"]  { background:#e1e1e1; }
+        .palette button[data-colorid="9"]  { background:#5484ed; }
+        .palette button[data-colorid="10"] { background:#51b749; }
+        .palette button[data-colorid="11"] { background:#dc2127; }
+      
+        .hint { color:#666; font-size:12px; margin-top:4px; }
+      </style>
+      
+  </head>
+  <body>
+    <div class="wrap">
+      <h3>Schedule Focus Block</h3>
+  
+      <!-- each block should use .section + .stack -->
+      <div class="section stack">
+        <label for="title">Title</label>
+        <input id="title" placeholder="e.g., Write methods section" />
+      </div>
+  
+      <div class="section stack">
+        <label for="date">Date</label>
+        <input id="date" type="date" />
+      </div>
+  
+      <div class="section when">
+        <div class="field">
+          <label for="startTime">Start time</label>
+          <input id="startTime" type="time" step="60" />
+        </div>
+  
+        <div class="field">
+          <label for="endTime">End time</label>
+          <input id="endTime" type="time" step="60" />
+        </div>
+  
+        <div class="field duration">
+          <label for="duration">Duration (min)</label>
+          <input id="duration" type="number" min="1" step="5" value="60" />
+        </div>
+  
+        <!-- right cell(s) can hold Section/Color if you’ve added them -->
+        <div class="field">
+          <label for="sectionInput">Section</label>
+          <input id="sectionInput" list="sectionList" placeholder="e.g., Writing, Study, Gym" />
+          <datalist id="sectionList"></datalist>
+        </div>
+  
+        <div class="field">
+          <label>Color</label>
+          <div id="colorPalette" class="palette" role="listbox" aria-label="Event color">
+            <button type="button" data-colorid="1"></button>
+            <button type="button" data-colorid="2"></button>
+            <button type="button" data-colorid="3"></button>
+            <button type="button" data-colorid="4"></button>
+            <button type="button" data-colorid="5"></button>
+            <button type="button" data-colorid="6"></button>
+            <button type="button" data-colorid="7"></button>
+            <button type="button" data-colorid="8"></button>
+            <button type="button" data-colorid="9"></button>
+            <button type="button" data-colorid="10"></button>
+            <button type="button" data-colorid="11"></button>
+          </div>
+          <input type="hidden" id="colorId" value="">
+        </div>
+      </div>
+  
+      <div class="section stack">
+        <label for="notes">Notes (optional)</label>
+        <textarea id="notes" rows="3" placeholder="Add additional details about your task ..."></textarea>
+      </div>
+  
+      <button id="create">Create Calendar Event</button>
+      <div class="hint" id="status"></div>
+    </div>
+  
+    <script src="popup.js"></script>
+  </body>
+</html>
